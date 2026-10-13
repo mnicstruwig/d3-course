@@ -1,19 +1,51 @@
-<html>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Michael Struwig</title>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+        <style>
+            body {
+                max-width: 760px;
+                margin: 3rem auto;
+                padding: 0 1.25rem;
+                color: #202a32;
+                font: 1rem/1.6 system-ui, sans-serif;
+            }
+
+            h1, h2 { line-height: 1.2; }
+            a { color: #176b62; }
+            .chart-section { margin: 3rem 0; }
+            .chart-section p { color: #58666d; }
+            #chart { width: 100%; min-height: 280px; }
+            .bar { fill: #258b7d; }
+            .bar:hover { fill: #176b62; }
+            .axis text { fill: #58666d; font-size: 12px; }
+            .axis path, .axis line { stroke: #ccd5d4; }
+            .value-label { fill: #202a32; font-size: 13px; font-weight: 600; }
+        </style>
+    </head>
     <body>
         <header>
             <h1>Michael Struwig</h1>
         </header>
         <main>
+            <p>Hi there!</p>
             <p>
-                Hi there!
-            </p>
-            <p>
-                I'm Michael -- an AI engineer / Head of AI.  I've got a history of
-                working in ML / AI and Data Science.  I'm primarily a backend
+                I'm Michael -- an AI engineer / Head of AI. I've got a history of
+                working in ML / AI and Data Science. I'm primarily a backend
                 engineer, and am excited to learn more about front-end, combining
                 one of my favourite past-times: dataviz!
             </p>
-            <p>
+
+            <section class="chart-section" aria-labelledby="chart-title">
+                <h2 id="chart-title">A small bar chart</h2>
+                <p>Values for categories A through D.</p>
+                <div id="chart"></div>
+            </section>
+
+            <section>
                 <h2>Hobbies</h2>
                 <ul>
                     <li>Cycling</li>
@@ -29,8 +61,73 @@
                 <h2>Favourite website</h2>
                 <p>Is <a href="https://pudding.cool">here</a></p>
                 <h2>A random picsum picture</h2>
-                <img src="https://picsum.photos/200" />
-            </p>
+                <img src="https://picsum.photos/200" alt="A random photo" />
+            </section>
         </main>
+        <script>
+            const data = [
+                { name: "A", value: 1 },
+                { name: "B", value: 5 },
+                { name: "C", value: 8 },
+                { name: "D", value: 10 }
+            ];
+
+            const container = d3.select("#chart");
+            const margin = { top: 20, right: 20, bottom: 38, left: 42 };
+            const height = 280;
+
+            function renderChart() {
+                const width = container.node().getBoundingClientRect().width;
+                const innerWidth = width - margin.left - margin.right;
+                const innerHeight = height - margin.top - margin.bottom;
+
+                container.selectAll("svg").remove();
+                const svg = container.append("svg")
+                    .attr("viewBox", `0 0 ${width} ${height}`)
+                    .attr("role", "img")
+                    .attr("aria-label", "Bar chart: A is 1, B is 5, C is 8, and D is 10.");
+                const plot = svg.append("g")
+                    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+                const x = d3.scaleBand()
+                    .domain(data.map(d => d.name))
+                    .range([0, innerWidth])
+                    .padding(0.28);
+                const y = d3.scaleLinear()
+                    .domain([0, 10])
+                    .nice()
+                    .range([innerHeight, 0]);
+
+                plot.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", `translate(0,${innerHeight})`)
+                    .call(d3.axisBottom(x));
+                plot.append("g")
+                    .attr("class", "axis")
+                    .call(d3.axisLeft(y).ticks(5).tickSize(-innerWidth))
+                    .call(g => g.select(".domain").remove());
+
+                plot.selectAll(".bar")
+                    .data(data)
+                    .join("rect")
+                    .attr("class", "bar")
+                    .attr("x", d => x(d.name))
+                    .attr("y", d => y(d.value))
+                    .attr("width", x.bandwidth())
+                    .attr("height", d => innerHeight - y(d.value));
+
+                plot.selectAll(".value-label")
+                    .data(data)
+                    .join("text")
+                    .attr("class", "value-label")
+                    .attr("x", d => x(d.name) + x.bandwidth() / 2)
+                    .attr("y", d => y(d.value) - 7)
+                    .attr("text-anchor", "middle")
+                    .text(d => d.value);
+            }
+
+            renderChart();
+            new ResizeObserver(renderChart).observe(container.node());
+        </script>
     </body>
 </html>
