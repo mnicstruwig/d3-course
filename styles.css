@@ -1,0 +1,124 @@
+* { box-sizing: border-box; }
+
+body {
+    width: 100%;
+    max-width: 1000px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    background: #fafafa;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.site-nav svg {
+    display: block;
+    width: auto;
+    height: 4rem;
+}
+
+.handwritten-content {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 1rem auto;
+}
+
+.handwritten-text {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 0 1rem;
+}
+
+.header-divider {
+    display: block;
+    width: 90%;
+    height: auto;
+    margin: 1rem auto;
+}
+
+svg a { cursor: pointer; }
+.site-nav a:hover use,
+.site-nav a:focus-visible use { fill: #0066ff; }
+.handwritten-content a path { fill: #0066ff; }
+
+/* header { position: relative; } */
+
+.view-toggle {
+    display: grid;
+    position: relative;
+    overflow: visible;
+    place-items: center;
+    width: 240px;
+    max-width: 80%;
+    height: 2rem;
+    margin: 0 auto;
+    padding: 0.25rem 0.8rem;
+    border: 1px solid #777;
+    border-radius: 999px;
+    background: #fff;
+    color: #777;
+    font: 0.9rem/1.2 system-ui, sans-serif;
+    cursor: pointer;
+    transition: color 0.5s;
+    transition: background-color 0.5s;
+}
+
+.view-toggle:hover,
+.view-toggle:focus-visible {
+    background: #777;
+    color: #fff;
+}
+
+.view-toggle-handwriting {
+    fill: currentColor;
+    position: absolute;
+    top: 0px;
+    display: none;
+    height: 3rem;
+}
+
+.readable-mode .view-toggle-label { display: none; }
+.readable-mode .view-toggle-handwriting { display: block; }
+
+.readable-content {
+    display: none;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1.25rem;
+    color: #171717;
+    font: 1.1rem/1.75 system-ui, sans-serif;
+}
+
+.readable-content p { margin: 0 0 1rem; }
+.readable-content a { color: #0066ff; }
+.illustration {
+    display: block;
+    max-width: 50%;
+    height: auto;
+    margin: 1rem auto;
+}
+
+.readable-mode .handwritten-content { display: none; }
+.readable-mode .readable-content { display: block; }
+
+@media (max-width: 640px) {
+    .site-nav svg { height: 2.5rem; }
+    .view-toggle {
+        width: 180px;
+        height: 1.5rem;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.75rem;
+    }
+    .view-toggle-handwriting { height: 2.25rem; }
+    .illustration {max-width: 60%}
+}
+
+.illustration-definitions { position: absolute; }
+
+/* .handwritten-content { background-color: #fff; } */
